@@ -35,18 +35,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A Beam pipeline that reads JSON tweets from a Kafka topic and counts words in all the tweets
- * in 1 minute fixed windows. Format of the the tweets is specified at
+ * in 2 minute fixed windows. Format of the the tweets is specified at
  * https://dev.twitter.com/overview/api/tweets. The word counts are written back to another
  * Kafka topic. <p>
  *
  * The maven configuration is based on Beam quickstart at
- *  https://beam.apache.org/get-started/quickstart-java/ <br>
+ * https://beam.apache.org/get-started/quickstart-java/ <br>
  *
  * To run it on direct runner (see quickstart page for other options:
  * <pre>
  *  $ mvn compile exec:java -Dexec.mainClass=org.example.wordcount.StreawmingWordCount
  * </pre>
- *
  */
 public class StreamingWordCount {
 
