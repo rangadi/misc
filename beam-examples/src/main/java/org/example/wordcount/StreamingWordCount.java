@@ -90,9 +90,9 @@ public class StreamingWordCount {
                    .withKeyCoder(StringUtf8Coder.of()) // Key is actually ignored.
                    .withValueCoder(StringUtf8Coder.of())
                    .withTimestampFn(TWEET_TIMESTAMP_OR_NOW)
-                   // Watermark should ideally come source (e.g. based on Kafka server side
-                   // timestamp). Here we just use a simple heuristic now - 2 minutes. If the
-                   // pipeline lags this could make all the records late.
+                   // Watermark should ideally come from the source (e.g. based on Kafka server side
+                   // timestamps). Here we just use a simple heuristic 'now - 2 minutes'. If the
+                   // pipeline lags this could mark all the records as 'late'.
                    .withWatermarkFn(kv -> Instant.now().minus(Duration.standardMinutes(2)))
                    .withoutMetadata())
         .apply(Values.create()) // This drops key (key is null for the kafka records)
