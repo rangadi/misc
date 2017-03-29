@@ -96,7 +96,7 @@ public class StreamingWordCount {
                    .withWatermarkFn(kv -> Instant.now().minus(Duration.standardMinutes(2)))
                    .withoutMetadata())
         .apply(Values.create()) // This drops key (key is null for the kafka records)
-        .apply(ParDo.of(new ExtractMentionsFn()))
+        .apply(ParDo.of(new ExtractMentionsFn())) // Extract mentions, another option hashtags.
         .apply(Window.into(FixedWindows.of(Duration.standardMinutes(
             options.getFixedWindowLengthMinutes()))))
         .apply(Count.perElement())
@@ -137,10 +137,10 @@ public class StreamingWordCount {
   private static class ExtractMentionsFn extends DoFn<String, String> {
     @ProcessElement
     public void processElement(ProcessContext ctx) throws Exception {
-      for (JsonNode hashtag : JSON_MAPPER.readTree(ctx.element())
+      for (JsonNode mention : JSON_MAPPER.readTree(ctx.element())
           .with("entities")
           .withArray("user_mentions")) {
-        ctx.output(hashtag.get("screen_name").asText());
+        ctx.output(mention.get("screen_name").asText());
       }
     }
   }
